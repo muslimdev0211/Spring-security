@@ -39,11 +39,11 @@ public class ApplicationSecurityConfig {
                 .authorizeHttpRequests((authz) ->authz
                         .requestMatchers("/*", "/index", "/css", "/js/*")
                         .permitAll()
-                        .requestMatchers("/api/**").hasRole(STUDENT.name())
-                        .requestMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
-                        .requestMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
-                        .requestMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
-                        .requestMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+                        .requestMatchers("/api/**").hasRole(ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
+                        .requestMatchers(HttpMethod.POST, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
+                        .requestMatchers(HttpMethod.PUT, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
+                        .requestMatchers(HttpMethod.GET, "/api/management/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated())
                 .httpBasic(Customizer.withDefaults());
@@ -63,7 +63,7 @@ public class ApplicationSecurityConfig {
         UserDetails lindaUser = User.builder()
                 .username("linda")
                 .password(passwordEncoder.encode("password123"))
-//                .roles(STUDENT.name())
+//                .roles(ADMIN.name())
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();
         UserDetails tomUser = User.builder()
