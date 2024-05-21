@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +22,7 @@ import static com.muslimdev.dars.security.ApplicationUsersRole.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
@@ -37,14 +39,14 @@ public class ApplicationSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) ->authz
-                        .requestMatchers( "/index", "/css", "/js/*")
+                        .requestMatchers( "/","/index", "/css", "/js/*")
                         .permitAll()
                         .requestMatchers("/api/*").hasRole(STUDENT.name())
 //                        .requestMatchers("/api/management/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
-                        .requestMatchers(HttpMethod.POST, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
-                        .requestMatchers(HttpMethod.PUT, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
-                        .requestMatchers(HttpMethod.GET,  "/api/management/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+//                        .requestMatchers(HttpMethod.DELETE, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
+//                        .requestMatchers(HttpMethod.POST, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
+//                        .requestMatchers(HttpMethod.PUT, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
+//                        .requestMatchers("/api/management/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated())
                 .httpBasic(Customizer.withDefaults());
