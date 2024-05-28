@@ -53,7 +53,10 @@ public class ApplicationSecurityConfig {
 //                        .requestMatchers("/api/management/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated())
-                .formLogin(Customizer.withDefaults());
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll());
+
 
         return http.build();
     }
