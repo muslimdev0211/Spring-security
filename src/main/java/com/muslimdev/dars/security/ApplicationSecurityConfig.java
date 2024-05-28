@@ -56,7 +56,8 @@ public class ApplicationSecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/courses", true)
-                        .permitAll());
+                        .permitAll())
+                .rememberMe(Customizer.withDefaults());
 
 
 
