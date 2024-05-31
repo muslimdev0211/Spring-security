@@ -66,7 +66,7 @@ public class ApplicationSecurityConfig {
                         .key("somethingverysecured"))
                 .logout(log -> log
                         .logoutUrl("/logout")
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logoutUrl", "GET"))
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                         .clearAuthentication(true)
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID", "remember-me")
