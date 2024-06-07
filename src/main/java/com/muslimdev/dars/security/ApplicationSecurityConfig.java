@@ -1,6 +1,7 @@
 package com.muslimdev.dars.security;
 
 import com.muslimdev.dars.auth.ApplicationUserService;
+import com.muslimdev.dars.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,6 +55,10 @@ public class ApplicationSecurityConfig {
 //                .csrf((csrf) -> csrf.
 //                        csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authentication -> authentication))
                 .authorizeHttpRequests((authz) ->authz
                         .requestMatchers( "/","/index", "/css", "/js/*")
                         .permitAll()
@@ -63,24 +69,24 @@ public class ApplicationSecurityConfig {
 ////                        .requestMatchers(HttpMethod.PUT, "/api/management/**").hasAuthority(ApplicationUsersPermissions.COURSES_WRITE.getPermission())
                         .requestMatchers("/api/management/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
-                .authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/courses", true)
-                        .passwordParameter("password")
-                        .usernameParameter("username")
-                        .permitAll())
-                .rememberMe((remember) ->remember
-                        .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
-                        .rememberMeParameter("remember-me")
-                        .key("somethingverysecured"))
-                .logout(log -> log
-                        .logoutUrl("/logout")
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                        .clearAuthentication(true)
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID", "remember-me")
-                        .logoutSuccessUrl("/login"));
+                .authenticated());
+//                .formLogin(form -> form
+//                        .loginPage("/login")
+//                        .defaultSuccessUrl("/courses", true)
+//                        .passwordParameter("password")
+//                        .usernameParameter("username")
+//                        .permitAll())
+//                .rememberMe((remember) ->remember
+//                        .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+//                        .rememberMeParameter("remember-me")
+//                        .key("somethingverysecured"))
+//                .logout(log -> log
+//                        .logoutUrl("/logout")
+//                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+//                        .clearAuthentication(true)
+//                        .invalidateHttpSession(true)
+//                        .deleteCookies("JSESSIONID", "remember-me")
+//                        .logoutSuccessUrl("/login"));
 
 
 
