@@ -58,10 +58,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
-                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
+                    .signWith(Keys.hmacShaKeyFor(key.getBytes()))
                 .compact();
 
 
-        response.addHeader("Authorization","Bearer" + token);
+        response.addHeader("Authorization","Bearer " + token);
     }
 }
